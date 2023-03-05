@@ -1,30 +1,25 @@
 package frc.robot.subsystems;
 
-import frc.robot.RobotContainer;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 
-public class Elevator extends SubsystemBase {
+public class Elevator extends PIDSubsystem {
 
-  public CANSparkMax left;
-  public CANSparkMax right;
+  private CANSparkMax left = new CANSparkMax(5, MotorType.kBrushless);
+  private CANSparkMax right = new CANSparkMax(6, MotorType.kBrushless);
 
-  private RelativeEncoder leftEncoder;
-  private RelativeEncoder rightEncoder;
+  private RelativeEncoder leftEncoder = left.getEncoder();
+  private RelativeEncoder rightEncoder = right.getEncoder();
 
   public Elevator() {
-    left = new CANSparkMax(5, MotorType.kBrushless);
-    right = new CANSparkMax(6, MotorType.kBrushless);
-
-    leftEncoder = left.getEncoder();
-    rightEncoder = right.getEncoder();
+    super(new PIDController(0.1, 0, 0.015));
+    setSetpoint(0);
 
     left.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     left.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
@@ -32,15 +27,21 @@ public class Elevator extends SubsystemBase {
     right.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
     left.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
-    left.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -32);
-    right.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 32);
+    left.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -36);
+    right.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 36);
     right.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
   }
 
   @Override
-  public void periodic() {
-    SmartDashboard.putNumber("leftElevator", leftEncoder.getPosition());
-    SmartDashboard.putNumber("rightElevator", rightEncoder.getPosition());
+  public void useOutput(double output, double setpoint) {
+    double speed = output/2;
+    left.set(-speed);
+    right.set(speed);
+  }
+
+  @Override
+  public double getMeasurement() {
+    return (-leftEncoder.getPosition() + rightEncoder.getPosition()) / 2;
   }
   
   public void stop() {

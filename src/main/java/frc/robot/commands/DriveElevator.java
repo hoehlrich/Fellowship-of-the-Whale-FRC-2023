@@ -16,14 +16,14 @@ public class DriveElevator extends CommandBase {
 
   @Override
   public void initialize() {
-    elevator.left.set(speed);
-    elevator.right.set(-speed);
+    // elevator.left.set(speed);
+    // elevator.right.set(-speed);
   }
 
   @Override
   public void end(boolean interrupted) {
-    elevator.left.set(0.0);
-    elevator.right.set(0.0);
+    // elevator.left.set(0.0);
+    // elevator.right.set(0.0);
   }
 
   @Override

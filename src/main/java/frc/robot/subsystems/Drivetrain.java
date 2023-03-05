@@ -43,10 +43,10 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("leftMasterPosition", leftMasterEncoder.getPosition());
-    SmartDashboard.putNumber("rightMasterPosition", rightMasterEncoder.getPosition());
-    SmartDashboard.putNumber("leftSlavePosition", leftSlaveEncoder.getPosition());
-    SmartDashboard.putNumber("rightSlavePosition", rightSlaveEncoder.getPosition());
+    // SmartDashboard.putNumber("leftMasterPosition", leftMasterEncoder.getPosition());
+    // SmartDashboard.putNumber("rightMasterPosition", rightMasterEncoder.getPosition());
+    // SmartDashboard.putNumber("leftSlavePosition", leftSlaveEncoder.getPosition());
+    // SmartDashboard.putNumber("rightSlavePosition", rightSlaveEncoder.getPosition());
   }
 
   public void driveWithJoystick() {
