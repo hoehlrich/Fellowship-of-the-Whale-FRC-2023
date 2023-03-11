@@ -33,10 +33,8 @@ public class RobotContainer {
   private final Command elevatorBottom = Commands.runOnce(() -> elevator.setSetpoint(0), elevator);
   private final Command elevatorTop = Commands.runOnce(() -> elevator.setSetpoint(34), elevator);
   private final Command toggleSolenoid = Commands.runOnce(() -> solenoid.toggle());
-  private final DriveElevator elevatorUp = new DriveElevator(elevator, -0.3);
-  private final DriveElevator elevatorDown = new DriveElevator(elevator, 0.3);
   private final Command armTop = Commands.runOnce(() -> arm.setSetpoint(0), arm);
-  private final Command arm90 = Commands.runOnce(() -> arm.setSetpoint(-0.25), arm);
+  private final Command arm90 = Commands.runOnce(() -> arm.setSetpoint(1), arm);
 
 
   public RobotContainer() {
@@ -45,16 +43,16 @@ public class RobotContainer {
 
     driving.addRequirements(drive);
     drive.setDefaultCommand(driving);
-    // elevator.enable();
+    elevator.enable();
     arm.enable();
     solenoid.set(Value.kForward);
   }
 
   private void configureBindings() {
-    // buttonTwo.and(buttonOne.negate()).whileTrue(elevatorUp);
-    // buttonOne.and(buttonTwo.negate()).whileTrue(elevatorDown);
     elevator.setSetpoint(0);
     arm.setSetpoint(0);
+    buttonOne.onTrue(elevatorBottom);
+    buttonTwo.onTrue(elevatorTop);
     buttonThree.onTrue(armTop);
     buttonFour.onTrue(arm90);
     buttonFive.onTrue(toggleSolenoid);

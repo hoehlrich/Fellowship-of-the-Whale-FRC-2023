@@ -18,7 +18,7 @@ public class Elevator extends PIDSubsystem {
   private RelativeEncoder rightEncoder = right.getEncoder();
 
   public Elevator() {
-    super(new PIDController(0.1, 0, 0.015));
+    super(new PIDController(0.05, 0, 0));
     setSetpoint(0);
 
     left.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
@@ -34,7 +34,13 @@ public class Elevator extends PIDSubsystem {
 
   @Override
   public void useOutput(double output, double setpoint) {
-    double speed = output/2;
+    double speed = output/4;
+
+    SmartDashboard.putNumber("elevSetpoint", setpoint);
+    SmartDashboard.putNumber("elevEncoder", (-leftEncoder.getPosition() + rightEncoder.getPosition()) / 2);
+    SmartDashboard.putNumber("elevSpeed", speed);
+    SmartDashboard.putNumber("elevOutput", output);
+
     left.set(-speed);
     right.set(speed);
   }

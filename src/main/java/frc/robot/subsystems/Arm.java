@@ -18,20 +18,18 @@ public class Arm extends PIDSubsystem {
   private RelativeEncoder rightEncoder = right.getEncoder();
 
   public Arm() {
-    super(new PIDController(0.1, 0, 0));
-    setSetpoint(0.25);
+    super(new PIDController(0.2, 0.01, 0.01));
+    setSetpoint(0);
   }
 
   @Override
   public void useOutput(double output, double setpoint) {
-    SmartDashboard.putNumber("PIDoutput", output);
-    SmartDashboard.putNumber("PIDsetpoint", setpoint);
-  
-    SmartDashboard.putNumber("leftArm", leftEncoder.getPosition());
-    SmartDashboard.putNumber("rightArm", rightEncoder.getPosition());
+    double speed = output*0.8;
 
-    double speed = output*8;
+    SmartDashboard.putNumber("armSetpoint", setpoint);
+    SmartDashboard.putNumber("armRot", -leftEncoder.getPosition());
     SmartDashboard.putNumber("armSpeed", speed);
+
     left.set(-speed);
     right.set(speed);
   }
